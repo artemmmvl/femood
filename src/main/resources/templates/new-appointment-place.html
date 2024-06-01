@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Онлайн запись</title>
+  <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="/css/appointment.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<div class="center-div">
+
+  <header class="header">
+    <h2>Выбор места</h2>
+  </header>
+  <div class="space-example">
+    <div class="space-for-example-places">
+      <div class="free-place">
+        <div class="place-example">
+          <div class="background">
+            <p class="number_place">
+
+            </p>
+          </div>
+        </div>
+        <div class="description">
+          <p>Свободно</p>
+        </div>
+      </div>
+
+      <div class="select-place">
+        <div class="place-example">
+          <div class="background">
+            <p class="number_place">
+
+            </p>
+          </div>
+        </div>
+        <div class="description">
+          <p>Выбрано</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form action="/appointments/new" method="get">
+    <h3>Места парикмахеров</h3>
+    <div class="space-hairdresser">
+      <div class="sink">
+        <img src="/img/sink.png">
+      </div>
+      <div class="space-for-places">
+        <div class="place-hairdresser">
+          <input class="check-place" name="place" type="radio" th:data-price="${place.get(0).getPrice()}" value="1">
+          <div class="place">
+            <div class="background">
+              <p class="number_place">
+                1
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="place-hairdresser">
+          <input class="check-place" name="place" type="radio" th:data-price="${place.get(1).getPrice()}" value="2">
+
+          <div class="place">
+            <div class="background">
+              <p class="number_place">
+                2
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="place-hairdresser">
+          <input class="check-place" name="place" th:data-price="${place.get(2).getPrice()}" type="radio" value="3">
+
+          <div class="place">
+            <div class="background">
+              <p class="number_place">
+                3
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="place-hairdresser">
+          <input class="check-place" name="place" th:data-price="${place.get(3).getPrice()}" type="radio" value="4">
+
+          <div class="place">
+            <div class="background">
+              <p class="number_place">
+                4
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3>Места визажистов</h3>
+
+    <div class="space-visagiste">
+      <div class="space-for-places-top">
+        <div class="place-visagiste">
+          <input class="check-place" name="place" th:data-price="${place.get(4).getPrice()}" type="radio" value="5">
+
+          <div class="place">
+            <div class="background">
+              <p class="number_place">
+                5
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="place-visagiste">
+          <input class="check-place" name="place" th:data-price="${place.get(5).getPrice()}" type="radio" value="6">
+
+          <div class="place">
+            <div class="background">
+              <p class="number_place">
+                6
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="place-visagiste">
+          <input class="check-place" name="place" type="radio" th:data-price="${place.get(6).getPrice()}" value="7">
+
+          <div class="place" >
+            <!--                        <div class="background">-->
+            <div class="background">
+              <p class="number_place">
+                7
+              </p>
+            </div>
+            <!--                        </div>-->
+          </div>
+        </div>
+      </div>
+      <div class="space-for-places-bottom">
+        <div class="place-visagiste">
+          <input class="check-place" name="place" type="radio" th:data-price="${place.get(7).getPrice()}" value="8">
+
+          <div class="place">
+            <div class="background">
+              <p class="number_place">
+                8
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="place-visagiste">
+          <input class="check-place" name="place" type="radio" th:data-price="${place.get(8).getPrice()}" value="9">
+
+          <div class="place" >
+            <div class="background" >
+              <p class="number_place">
+                9
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="place-visagiste">
+          <input class="check-place" name="place" type="radio" th:data-price="${place.get(9).getPrice()}" value="10">
+
+          <div class="place" >
+            <div  class="background">
+              <p style="padding-left: 5.5px" class="number_place">
+                10
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="price">
+      <p>Цена за час: <span></span></p>
+    </div>
+    <button class="button">
+      Продолжить
+    </button>
+  </form>
+</div>
+<script>
+  let places=document.querySelectorAll(".place")
+  for(let i=0;i<places.length;i++)
+  {
+    places[i].addEventListener("click", function (){
+      this.previousElementSibling.checked=true
+      document.querySelector(".price").style.display="block"
+      document.querySelector("button").style.marginTop="20px"
+      document.querySelector(".price span").innerHTML=this.previousElementSibling.getAttribute("data-price")+ " Br"
+      console.log(this.previousElementSibling.getAttribute("data-price"))
+    })
+  }
+
+</script>
+</body>
+</html>

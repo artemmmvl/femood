@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн запись</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/css/appointment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--    <link rel="stylesheet" href="add-appointment.css">-->
+
+</head>
+<body>
+
+<div class="center-div">
+
+    <header class="header">
+        <h2>Ввод информации</h2>
+    </header>
+    <form method="post" action="/appointments/new">
+        <div class="info-about-client" style="display: block;">
+            <div class="input-text">
+                <input required="" type="text" value="" placeholder="Имя и фамилия" name="name" id="name">
+            </div>
+            <div class="input-text">
+                <input required="" type="text" value="" name="inst" placeholder="Ник в инстаграмме" id="inst">
+            </div>
+            <div class="input-text">
+                <input type="email" required="" name="email" value="" placeholder="email" id="email">
+            </div>
+            <div class="input-text">
+                <input type="tel" required="" name="phone" value="" placeholder="Номер телефона" id="phone">
+            </div>
+            <div class="input-text">
+                <textarea name="comment" placeholder="Комментарий" id="comment"></textarea>
+            </div>
+
+            <input type="hidden" name="place" th:value="${place}">
+            <input type="hidden" name="schedule" th:value="${schedule}">
+
+            <!--      <div class="send-email">-->
+            <!--        <input type="checkbox" checked="" id="send-email" name="send_email">-->
+            <!--        <div>Получить информацию о записи на почту</div>-->
+            <!--      </div>-->
+        </div>
+        <button  class="button">
+            Записаться
+        </button>
+    </form>
+</div>
+<script>
+    let submited=false
+    document.querySelector("form").onsubmit=function(evt){
+        console.log("send")
+        if(submited){
+             evt.preventDefault()
+        }
+        else{
+            submited=true
+            evt.submit()
+        }
+        document.querySelector("button").disabled = true;
+    }
+</script>
+</body>
+</html>

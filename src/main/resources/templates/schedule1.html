@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Записи</title>
+    <link rel="stylesheet" href="/css/appointment.css">
+
+    <link rel="stylesheet" href="/css/add-appointment.css">
+    <link rel="stylesheet" href="/css/add-schedule.css">
+    <link rel="stylesheet" href="/css/schedules.css">
+    <link rel="stylesheet" href="/css/schedule.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+    <style>
+        .date-appointment{
+            box-shadow: 0 1px 12px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        .date-appointment[data-hidden=true]{
+            background-color: #d7d7d7;
+            border-color: #b6b6b6;
+
+        }
+        .date-appointment[data-hidden=true]>.delete-day{
+            display: none;
+
+        }
+        .date-appointment .delete-day, .date-appointment .add-day{
+            position: absolute;
+            right: -7px;
+            top: -6px;
+            /*background-color: rgba(238, 90, 75, 0.94);*/
+            background-color: #efefef;
+            border-style: solid;
+            border-width: 0.5px;
+            border-color: #8f8f8f;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+        }
+        .add-day{
+            display: none;
+        }
+        .date-appointment button, .add-day button{
+            border-style: none;
+            background-color: transparent;
+            font-size: 20px;
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
+
+        }
+
+        .delete-day form, .add-day form{
+            position: relative;
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
+        }
+        .delete-day button:before, .add-day button:before{
+            content: '';
+            width: 12px;
+            position: absolute;
+            top: 11.5px;
+            left: 6.5px;
+            height: 1.5px;
+            cursor: pointer;
+
+            background-color: #141414;
+        }
+        .add-day button:after{
+            content: '';
+            width: 12px;
+            position: absolute;
+            top: 11.5px;
+            left: 6.5px;
+            height: 1.5px;
+            cursor: pointer;
+            transform: rotate(90deg);
+            background-color: #141414;
+        }
+        .back-appointment{
+            position: fixed;
+            display: none;
+            min-height: 100vh;
+            width: 100vw;
+            top: 0;
+            left: 0;
+            /*display: flex;*/
+            justify-content: space-evenly;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            overflow: scroll;
+        }
+        .appointment-center{
+            background: white;
+            cursor: default;
+
+            width: 400px;
+            position: absolute;
+            z-index: 101;
+
+            top: 25%;
+            border-radius: 20px;
+            padding: 30px;
+            display: inline-block;
+        }
+        .center-div{
+            width: calc(80% - 40px);
+            /*display: none;*/
+            margin-left: 10%;
+            padding: 20px;
+        }
+
+        .form-for-add-appointment{
+            position: fixed;
+            display: none;
+            min-height: 100vh;
+            /*padding: 1000px;*/
+            width: 100vw;
+            top: 0;
+            left: 0;
+            /*display: flex;*/
+            justify-content: space-evenly;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.3);
+            /*z-index: 100;*/
+            z-index: 100;
+            /*overflow: hidden;*/
+        }
+        .header-h h3{
+            margin: 0;
+            padding: 0;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .header-h{
+            border-bottom-style: solid;
+            border-color: #d5d4d4;
+            margin-bottom: 30px;
+        }
+        .form-for-add-appointment form{
+            position: absolute;
+            top: 25%;
+            width: 350px;
+            background-color: white;
+            border-radius: 25px;
+            padding: 35px;
+
+        }
+        .form-for-add-appointment div{
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+        }
+        .form-for-add-appointment div label{
+
+            margin-bottom: 5px;
+            font-size: 17px;
+            font-family: 'Manrope', Arial, sans-serif;
+        }
+        .form-for-add-appointment div input, textarea{
+            border-radius: 0;
+            height: 35px;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #525252;
+            resize: vertical;
+            font-size: 18px;
+            font-family: 'Manrope', Arial, sans-serif;
+        }
+        textarea{
+            height: 100px;
+        }
+        .form-for-add-appointment button{
+            width: 100%;
+            height: 40px;
+            background-color: white;
+            border-radius: 0;
+            border-style: solid;
+            border-color: #525252;
+            border-width: 1.2px;
+            font-size: 20px;
+        }
+        .time[data-hidden=true]>.time-block{
+            background-color: #d7d7d7;
+            border-color: #b6b6b6;
+        }
+        .time[data-hidden=true]>.form-for-delete-schedule{
+            display: none;
+        }
+        .profile-container {
+            position: relative;
+            width: calc(65% - 100px);
+            margin-left: 10%;
+        }
+        .all-schedules{
+            width: 100%;
+            margin-top: 100px;
+        }
+
+    </style>
+    <link rel="stylesheet" href="/css/admin.css">
+
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="div-img">
+            <a href="/">
+                <img  src="/img/femood.png">
+            </a>
+        </div>
+        <div class="name-page">
+            <p>Расписание</p>
+        </div>
+
+        <div class="menu-burger">
+            <div class="before"></div>
+            <div class="center"></div>
+            <div class="after"></div>
+        </div>
+    </div>
+</header>
+<div class="main">
+    <aside class="aside">
+        <div class="container">
+            <div class="navigation">
+                <ul>
+                    <li >
+                        <a href="/admin">Профиль</a>
+                    </li>
+                    <li>
+                        <a href="/admin/password/change">Изменить пароль</a>
+                    </li>
+                    <li th:class="${actual}?'current':''">
+                        <a href="/schedule/actual">Актуальные записи</a>
+                    </li>
+                    <li th:class="${!actual}?'current':''">
+                        <a href="/schedule/old">Старые записи</a>
+                    </li>
+                    <li>
+                        <a href="/places">Цены</a>
+                    </li>
+                    <li>
+                        <a th:if="${superadmin}" href="/admin/users">Пользователи</a>
+                    </li>
+                    <li>
+                        <a  href="/logout">Выход</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <div class="profile-container">
+        <div class="form-for-add-appointment">
+            <form method="post" action="/appointments/new">
+                <div class="header-h">
+                    <h3>Новая запись</h3>
+
+                </div>
+                <div>
+                    <label for="name">Имя</label>
+                    <input type="text" name="name" id="name">
+                </div>
+                <div>
+                    <label for="comment">Комментарий</label>
+                    <textarea name="comment" id="comment"></textarea>
+                </div>
+                <input type="hidden" class="hidden" name="schedule">
+                <button>Отправить</button>
+            </form>
+
+        </div>
+
+
+        <div class="container-all-schedules">
+            <div class="all-schedules">
+                <div class="schedule-in-day" >
+                    <tr th:each="entry:${schedules!=null ? schedules.entrySet() : null}">
+                        <div  class="date-appointment">
+                            <p th:text="${entry.getKey()}">10 авг</p>
+                            <div class="delete-day">
+                                <form method="post" action="/schedule/delete">
+                                    <input type="hidden" name="schedules">
+                                    <button></button>
+                                </form>
+                            </div>
+                            <div class="add-day">
+                                <form method="post" action="/schedule/add">
+                                    <input type="hidden" name="schedules">
+                                    <button></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div  class="times-appointments">
+                            <th th:each="entryValue:${entry.getValue().keySet()}">
+                                <div  class="time" >
+                                    <!--                            <input type="checkbox" th:checked="${entryValue.isBooked()}" th:id="${entryValue.getDate()}" th:value="${entryValue.getId()}" name="schedule">-->
+                                    <div class="time-block">
+                                        <p th:text="${entryValue}">10:00</p>
+                                    </div>
+
+                                    <div class="form-for-delete-schedule">
+                                        <form method="post" action="/schedule/delete">
+                                            <input type="hidden" name="schedules">
+                                            <button></button>
+                                        </form>
+                                    </div>
+                                    <div class="form-for-add-schedule">
+                                        <form method="post" action="/schedule/add">
+                                            <input type="hidden" name="schedules">
+                                            <button></button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div style="display: none; width: 100%;">
+                                    <div class="center-div">
+                                        <div class="space-example">
+                                            <div class="space-for-example-places">
+                                                <div class="free-place">
+                                                    <div class="place-example">
+                                                        <div class="background">
+                                                            <p class="number_place">
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="description">
+                                                        <p>Свободно</p>
+                                                    </div>
+                                                </div>
+                                                <div class="select-place">
+                                                    <div class="place-example">
+                                                        <div class="background">
+                                                            <p class="number_place">
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="description">
+                                                        <p>Выбрано</p>
+                                                    </div>
+                                                </div>
+                                                <div class="booked-place">
+                                                    <div class="place-example">
+                                                        <div class="background">
+                                                            <p class="number_place">
+
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="description">
+                                                        <p>Забронировано</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space-hairdresser">
+                                            <div class="sink">
+                                                <img src="/img/sink.png">
+                                            </div>
+                                            <div class="space-for-places">
+                                                <div class="place-hairdresser">
+                                                    <input class="check-place" name="place" type="radio"  value="1">
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(0).isHidden()}" th:data-booked="${entry.getValue().get(entryValue).get(0).isBooked()}" th:data-id="${entry.getValue().get(entryValue).get(0).getId()}">
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(0).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                1
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(0).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(0).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(0).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(0).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(0).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(0).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="place-hairdresser">
+                                                    <input class="check-place" name="place" type="radio"  value="2">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(1).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(1).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(1).isBooked()}">
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(1).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                2
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(1).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(1).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(1).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(1).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(1).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(1).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="place-hairdresser">
+                                                    <input class="check-place" name="place"  type="radio" value="3">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(2).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(2).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(2).isBooked()}">
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(2).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                3
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(2).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(2).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(2).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(2).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(2).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(2).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="place-hairdresser">
+                                                    <input class="check-place" name="place"  type="radio" value="4">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(3).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(3).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(3).isBooked()}">
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(3).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                4
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(3).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(3).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(3).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(3).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(3).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(3).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-visagiste">
+                                            <div class="space-for-places-top">
+                                                <div class="place-visagiste">
+                                                    <input class="check-place" name="place" type="radio" value="5">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(4).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(4).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(4).isBooked()}">
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(4).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                5
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(4).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(4).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(4).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(4).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(4).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(4).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="place-visagiste">
+                                                    <input class="check-place" name="place"  type="radio" value="6">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(5).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(5).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(5).isBooked()}">
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(5).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                6
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(5).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(5).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(5).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(5).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(5).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(5).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="place-visagiste">
+                                                    <input class="check-place" name="place" type="radio"  value="7">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(6).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(6).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(6).isBooked()}">
+                                                        <!--                        <div class="background">-->
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(6).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                7
+                                                            </p>
+                                                        </div>
+                                                        <!--                        </div>-->
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(6).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(6).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(6).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(6).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(6).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(6).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="space-for-places-bottom">
+                                                <div class="place-visagiste">
+                                                    <input class="check-place" name="place" type="radio"  value="8">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(7).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(7).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(7).isBooked()}">
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(7).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                8
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(7).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(7).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(7).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(7).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(7).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(7).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="place-visagiste">
+                                                    <input class="check-place" name="place" type="radio"  value="9">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(8).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(8).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(8).isBooked()}">
+                                                        <div class="background" th:style="${entry.getValue().get(entryValue).get(8).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p class="number_place">
+                                                                9
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div th:if="${entry.getValue().get(entryValue).get(8).isBooked()}" class="back-appointment">
+                                                        <div class="appointment-center">
+                                                            <div class="info-about-schedule">
+                                                                <p class="header-text">Запись</p>
+                                                                <div class="line"></div>
+                                                                <div class="name-service">
+                                                                    <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(8).getAppointment().getNameUser()}"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(8).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(8).getAppointment().getInst()}" class="value"></span>
+                                                                </div>
+                                                                <div class="name-service">
+                                                                    <span>Комментарий:</span>
+                                                                    <span  th:text="${entry.getValue().get(entryValue).get(8).getAppointment().getComment()}" class="value"></span>
+
+                                                                </div>
+                                                                <div class="buttons">
+                                                                    <form method="post" action="/appointments/delete">
+                                                                        <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(8).getAppointment().getId()}" >
+                                                                        <button class="delete-schedule">Удалить запись</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="place-visagiste">
+                                                    <input class="check-place" name="place" type="radio"  value="10">
+
+                                                    <div class="place" th:data-hidden="${entry.getValue().get(entryValue).get(9).isHidden()}" th:data-id="${entry.getValue().get(entryValue).get(9).getId()}" th:data-booked="${entry.getValue().get(entryValue).get(9).isBooked()}">
+                                                        <div  class="background" th:style="${entry.getValue().get(entryValue).get(9).isBooked()}?'background-color: #e8e8e8;'">
+                                                            <p style="padding-left: 5.5px" class="number_place">
+                                                                10
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div th:if="${entry.getValue().get(entryValue).get(9).isBooked()}" class="back-appointment">
+                                                    <div class="appointment-center">
+                                                        <div class="info-about-schedule">
+                                                            <p class="header-text">Запись</p>
+                                                            <div class="line"></div>
+                                                            <div class="name-service">
+                                                                <span>Имя:</span> <span class="value" th:text="${entry.getValue().get(entryValue).get(9).getAppointment().getNameUser()}"></span>
+                                                            </div>
+                                                            <div class="name-service">
+                                                                <span>Номер:</span> <span th:text="${entry.getValue().get(entryValue).get(9).getAppointment().getPhoneNumber()}" class="value"></span>
+                                                            </div>
+                                                            <div class="name-service">
+                                                                <span>Inst:</span> <span th:text="${entry.getValue().get(entryValue).get(9).getAppointment().getInst()}" class="value"></span>
+                                                            </div>
+                                                            <div class="name-service">
+                                                                <span>Комментарий:</span>
+                                                                <span  th:text="${entry.getValue().get(entryValue).get(9).getAppointment().getComment()}" class="value"></span>
+
+                                                            </div>
+                                                            <div class="buttons">
+                                                                <form method="post" action="/appointments/delete">
+                                                                    <input type="hidden" name="id" th:value="${entry.getValue().get(entryValue).get(9).getAppointment().getId()}" >
+                                                                    <button class="delete-schedule">Удалить запись</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </th>
+                        </div>
+                    </tr>
+                </div>
+            </div>
+        </div>
+        <script src="/script/menu-header.js"></script>
+
+        <script>
+            let dates=document.querySelectorAll(".date-appointment")
+            var checkOpenDatesSchedules=new Array(dates.length);
+            for(let i=0;i<dates.length;i++){
+                placesTime=dates[i].nextElementSibling.querySelectorAll(".place")
+                let j=0
+                for(j;j<placesTime.length;j++){
+                    if(placesTime[j].getAttribute("data-hidden")=="false"){
+                        // console.log(placesTime[j])
+                        break
+                    }
+                }
+                if(j===placesTime.length){
+                    // timeBlocks[i].querySelector('.time-block').style.backgroundColor="#e6e5e5"
+                    dates[i].setAttribute("data-hidden","true")
+                    dates[i].querySelector(".add-day").style.display="block"
+                }
+                dates[i].addEventListener("click",func.bind(null, i),this)
+
+            }
+            function func (i, event) {
+                block = event.currentTarget
+                if (!checkOpenDatesSchedules[i]) {
+                    if(block.getAttribute('data-hidden')!="true") {
+
+                        block.nextElementSibling.style.display = "flex"
+                        block.style.backgroundColor = "whitesmoke"
+                        // block.style.color = "white"
+                        // block.style.fontWeight = "800"
+
+                        checkOpenDatesSchedules[i] = true
+                    }
+                } else {
+                    block.nextElementSibling.style.display = "none"
+                    block.style.backgroundColor = "white"
+                    block.style.color = "black"
+                    block.style.fontWeight = "400"
+                    checkOpenDatesSchedules[i] = false
+                }
+            }
+            let timeBlocks=document.querySelectorAll(".time")
+            let arrTime=new Array(timeBlocks.length)
+            for(let i=0;i<timeBlocks.length;i++){
+                arrTime[i]=0
+                placesTime=timeBlocks[i].nextElementSibling.querySelectorAll(".place")
+                let j=0
+                for(j;j<placesTime.length;j++){
+                    if(placesTime[j].getAttribute("data-hidden")=="false"){
+                        // console.log(placesTime[j])
+                        break
+                    }
+                }
+                if(j===placesTime.length){
+                    // timeBlocks[i].querySelector('.time-block').style.backgroundColor="#e6e5e5"
+                    timeBlocks[i].setAttribute("data-hidden","true")
+                    timeBlocks[i].querySelector(".form-for-add-schedule").style.display="block"
+                }
+                if(timeBlocks[i].nextElementSibling.querySelector(".appointment-center")){
+                    timeBlocks[i].querySelector(".time-block").style.backgroundColor="#f4c9c9 "
+                    timeBlocks[i].querySelector(".form-for-delete-schedule").style.backgroundColor="#eaafaf"
+
+                }
+                timeBlocks[i].onclick=function (){
+                    // console.log(this)
+                    if (!arrTime[i]) {
+                        if(this.getAttribute('data-hidden')!="true"){
+                            this.nextElementSibling.style.display = "block"
+                        }
+                    } else {
+                        this.nextElementSibling.style.display = "none"
+
+                    }
+                    arrTime[i] = !arrTime[i]
+
+                }
+            }
+
+            places=document.querySelectorAll(".place")
+            for(let i=0;i<places.length;i++){
+                places[i].onclick=function (){
+                    // console.log(this)
+                    // console.log(this.getAttribute("data-booked"))
+                    if(this.getAttribute("data-booked")==="true"){
+                        this.nextElementSibling.style.display="flex"
+                    }
+                    else {
+                        // console.log(document.querySelector(".form-for-add-appointment"))
+                        document.querySelector(".form-for-add-appointment").style.display="flex";
+                        document.querySelector(".form-for-add-appointment .hidden").value=this.getAttribute("data-id")
+
+                    }
+                }
+            }
+            document.querySelector(".form-for-add-appointment").onclick=function (evt){
+
+                if(evt.currentTarget===evt.target){
+                    this.style.display="none"
+                    // document.body.style.overflow="scroll"
+                }
+            }
+            app=document.querySelectorAll(".back-appointment")
+            for(let i=0;i<app.length;i++){
+                app[i].onclick=function (evt){
+
+                    if(evt.currentTarget===evt.target){
+                        this.style.display="none"
+                        // document.body.style.overflow="scroll"
+                    }
+                }
+            }
+
+            hideS=document.querySelectorAll(".form-for-delete-schedule form")
+            for(let i=0;i<hideS.length;i++){
+
+                hideS[i].onsubmit=function (evt){
+
+                    var appointment=false
+                    let schedules="["
+                    let places=this.parentElement.parentElement.nextElementSibling.querySelectorAll(".place")
+                    // console.log(this.parentElement.parentElement.nextElementSibling)
+                    for(let i=0;i<places.length;i++){
+                        schedules+=places[i].getAttribute("data-id")
+                        if(places[i].getAttribute("data-booked")=="true"){
+                            appointment=true
+                        }
+                        if(i!==places.length-1){
+                            schedules+=", "
+                        }
+                    }
+                    var check=false
+                    schedules+="]"
+                    this.querySelector("input").value=schedules
+                    if (appointment){
+                        check =confirm("Вы действительно хотите удалить расписание? Записи будут удаленны")
+                    }
+                    else {
+                        check =confirm("Вы действительно хотите удалить расписание? ")
+                    }
+                    if (check){
+                        evt.submit()
+                    }
+                    else {
+                        evt.preventDefault()
+                    }
+
+
+
+                    // console.log(schedules)
+                    // console.log(this.querySelector("input"))
+
+
+                }
+            }
+            hideScheduleDay=document.querySelectorAll(".delete-day form")
+            for(let i=0;i<hideScheduleDay.length;i++){
+                hideScheduleDay[i].onsubmit=function (evt){
+                    var appointment=false
+                    let schedules="["
+                    let places=this.parentElement.parentElement.nextElementSibling.querySelectorAll(".place")
+                    // console.log(this.parentElement.parentElement.nextElementSibling)
+                    for(let i=0;i<places.length;i++){
+                        schedules+=places[i].getAttribute("data-id")
+                        if(places[i].getAttribute("data-booked")=="true"){
+                            appointment=true
+                        }
+                        if(i!==places.length-1){
+                            schedules+=", "
+                        }
+                    }
+                    var check=false
+                    schedules+="]"
+                    this.querySelector("input").value=schedules
+                    if (appointment){
+                        check =confirm("Вы действительно хотите удалить расписание? Записи будут удаленны")
+                    }
+                    else {
+                        check =confirm("Вы действительно хотите удалить расписание? ")
+                    }
+                    if (check){
+                        evt.submit()
+                    }
+                    else {
+                        evt.preventDefault()
+                    }
+
+
+
+                }
+            }
+            addSDay=document.querySelectorAll(".add-day form")
+            // console.log(addSDay)
+
+            for(let i=0;i<addSDay.length;i++){
+                addSDay[i].onsubmit=function (evt){
+                    let check =confirm("Вы действительно хотите вернуть расписание?")
+                    if(check){
+                        let schedules="["
+                        let places=this.parentElement.parentElement.nextElementSibling.querySelectorAll(".place")
+                        // console.log(this.parentElement.parentElement.nextElementSibling)
+                        for(let i=0;i<places.length;i++){
+                            schedules+=places[i].getAttribute("data-id")
+                            if(i!==places.length-1){
+                                schedules+=", "
+                            }
+                        }
+                        schedules+="]"
+                        this.querySelector("input").value=schedules
+                        // console.log(schedules)
+                        // console.log(this.querySelector("input"))
+                        evt.submit()
+                    }
+                    else {
+                        evt.preventDefault()
+
+                    }
+                }
+            }
+            // deleteAppoinments=document.querySelectorAll(".back-appointment form")
+            // for(let i=0;i<deleteAppoinments.length;i++){
+            //     console.log(deleteAppoinments[i])
+            //
+            //     deleteAppoinments[i].onsubmit=function (evt){
+            //         evt.preventDefault()
+            //         console.log(this.parentElement.parentElement.parentElement.parentElement.previousElementSibling.getAttribute("data-id"))
+            //         this.querySelector("input").value= this.parentElement.parentElement.parentElement.parentElement.previousElementSibling.getAttribute("data-id")
+            //
+            //         this.submit()
+            //     }
+            // }
+
+            addS=document.querySelectorAll(".form-for-add-schedule form")
+            for(let i=0;i<addS.length;i++){
+                addS[i].onsubmit=function (evt){
+
+                    var check =confirm("Вы действительно хотите вернуть расписание?")
+                    if(check){
+                        let schedules="["
+                        let places=this.parentElement.parentElement.nextElementSibling.querySelectorAll(".place")
+                        // console.log(this.parentElement.parentElement.nextElementSibling)
+                        for(let i=0;i<places.length;i++){
+                            schedules+=places[i].getAttribute("data-id")
+                            if(i!==places.length-1){
+                                schedules+=", "
+                            }
+                        }
+                        schedules+="]"
+                        this.querySelector("input").value=schedules
+                        // console.log(schedules)
+                        // console.log(this.querySelector("input"))
+                        evt.submit()
+                    }
+                    else {
+                        evt.preventDefault()
+
+                    }
+                }
+            }
+
+
+
+        </script>
+
+    </div>
+</div>
+<script src="/js/admin.js"></script>
+
+</body>
+
+
+</html>

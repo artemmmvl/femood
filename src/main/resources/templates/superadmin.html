@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        .profile-container{
+            width: 90%;
+            margin-left: 5%;
+            margin-top:100px;
+        }
+        .main{
+            display: block;
+
+        }
+        select{
+            width:100px;
+
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="div-img">
+            <a href="/">
+                <img  src="/img/femood.png">
+            </a>
+        </div>
+        <div class="name-page">
+            <p>Профиль</p>
+        </div>
+
+        <div class="menu-burger">
+            <div class="before"></div>
+            <div class="center"></div>
+            <div class="after"></div>
+        </div>
+
+    </div>
+</header>
+<div class="main">
+    <aside class="aside">
+        <div class="container">
+            <div class="navigation">
+                <ul>
+                    <li >
+                        <a href="/admin">Профиль</a></li>
+                    <li>
+                        <a href="/admin/password/change">Изменить пароль</a>
+                    </li>
+                    <li >
+                        <a href="/schedule/actual">Актуальные записи</a>
+                    </li>
+                    <li>
+                        <a href="/schedule/actual">Старые записи</a>
+                    </li>
+                    <li>
+                        <a href="/places">Цены</a>
+                    </li>
+                    <li class="current">
+                        <a  href="/admin/users">Пользователи</a>
+                    </li>
+                    <li>
+                        <a  href="/logout">Выход</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <div class="profile-container">
+        <table>
+            <tr>
+                <td>
+                    id
+                </td>
+                <td>
+                    active
+                </td>
+                <td>
+                    email
+                </td>
+                <td>
+                    firstname
+                </td>
+                <td>
+                    lastname
+                </td>
+                <td>
+                    password
+                </td>
+                <td>
+                    PhoneNumber
+                </td>
+                <td>
+                    Роли
+                </td>
+                <td>
+                    Сохранение
+                </td>
+                <td>
+                    Удаление
+                </td>
+            </tr>
+
+            <tr th:each="cur:${users}">
+                <form method="post" action="/admin/users/change">
+                    <td>
+                        <input type="number" name="id" readonly th:value="${cur.getId()}">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="active" th:checked="${cur.isActive()}">
+                    </td>
+                    <td>
+                        <input type="text" name="email" th:value="${cur.getEmail()}">
+                    </td>
+                    <td>
+                        <input type="text" name="firstname" th:value="${cur.getFirstname()}">
+                    </td>
+                    <td>
+                        <input type="text" name="lastname" th:value="${cur.getLastname()}">
+                    </td>
+                    <td>
+                        <input type="password" name="password">
+                    </td>
+                    <td>
+                        <input type="text" name="phoneNumber" th:value="${cur.getPhoneNumber()}">
+                    </td>
+                    <td>
+                        <select multiple name="roles">
+                            <option value="ROLE_USER" th:selected="${cur.findRole('ROLE_USER')}?'true':'false'">
+                                Пользователь
+                            </option>
+                            <option  value="ROLE_ADMIN"  th:selected="${cur.findRole('ROLE_ADMIN')}?'true':'false'">
+                                Админ
+                            </option>
+                            <option value="ROLE_SUPERADMIN" th:selected="${cur.findRole('ROLE_SUPERADMIN')}?'true':'false'">
+                                Крутой админ
+                            </option>
+                        </select>
+<!--                        <input type="text" name="roles" th:value="${cur.getRoles()}">-->
+                    </td>
+                    <td>
+                        <input type="submit" value="Сохранить">
+                    </td>
+                </form>
+                <td>
+                    <form method="post" action="/admin/users/delete">
+                        <input type="hidden" name="id" th:value="${cur.getId()}">
+                        <input type="submit" value="Удалить">
+                    </form>
+
+                </td>
+            </tr>
+
+
+        </table>
+
+    </div>
+
+</div>
+<script src="/js/admin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+  <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="/css/admin.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="div-img">
+      <a href="/">
+        <img  src="/img/femood.png">
+      </a>
+    </div>
+    <div class="name-page">
+      <p>Профиль</p>
+    </div>
+
+    <div class="menu-burger">
+      <div class="before"></div>
+      <div class="center"></div>
+      <div class="after"></div>
+    </div>
+
+  </div>
+</header>
+<div class="main">
+<aside class="aside">
+  <div class="container">
+    <div class="navigation">
+      <ul>
+        <li class="current">
+          <a href="/admin">Профиль</a>
+        </li>
+        <li>
+          <a href="/admin/password/change">Изменить пароль</a>
+        </li>
+        <li >
+          <a href="/schedule/actual">Актуальные записи</a>
+        </li>
+        <li>
+          <a href="/schedule/actual">Старые записи</a>
+        </li>
+        <li>
+          <a href="/places">Цены</a>
+        </li>
+        <li>
+          <a th:if="${superadmin}" href="/admin/users">Пользователи</a>
+        </li>
+        <li>
+          <a  href="/logout">Выход</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</aside>
+
+<div class="profile-container">
+  <div class="info-about-people">
+    <div class="text-info">
+      <h2>Информация о пользователе</h2>
+      <form method="post" action="/admin/change">
+        <div class="name">
+          <label for="name">Имя</label>
+          <input type="text" name="firstname" id="name" th:value="${people.getFirstname()}">
+        </div>
+        <div class="lastname">
+          <label for="lastname">Фамилия</label>
+          <input type="text" name="lastname" id="lastname" th:value="${people.getLastname()}">
+        </div>
+        <div class="phone">
+          <label for="phone">Номер телефона</label>
+          <input type="text" name="phone" id="phone" th:value="${people.getPhoneNumber()}">
+        </div>
+        <div class="email">
+          <label for="email">Почта</label>
+          <input type="email" name="email" id="email" th:value="${people.getEmail()}">
+          <p class="error-login" style="color:red;" th:text="${error}"></p>
+        </div>
+        <button>Сохранить</button>
+      </form>
+
+      </form>
+    </div>
+
+
+  </div>
+</div>
+</div>
+<script src="/js/admin.js"></script>
+
+</body>
+</html>

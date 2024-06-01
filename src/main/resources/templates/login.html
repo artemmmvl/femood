@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вход</title>
+
+  <link rel="stylesheet" href="/css/registration.css">
+
+</head>
+<style>
+  .div-form{
+	margin-top: 25vh;
+  }
+  @media(max-width: 450px){
+
+  .div-form form>div p a {
+
+    font-size: 13px;
+  }
+}
+</style>
+<body>
+
+<div class="div-error">
+  <p th:text="${error}" class="error"></p>
+</div>
+<div class="container">
+  <div class="div-form">
+    <div class="reg-h-text">
+      <h2>Вход</h2>
+
+    </div>
+    <form action="/login" method="post">
+      <div>
+        <input class="name" id="name"  name="username" th:value="${username}" placeholder="email" type="email">
+      </div>
+
+      <div>
+        <input class="password_reg" name="password" th:value="${password}"  placeholder="Пароль" minlength="6" type="password">
+      </div>
+
+      <div>
+        <button class="reg_button" type="submit">Вход</button>
+      </div>
+      <div>
+        <p><a href="/registration">Нет аккаунта? <span>Зарегистрироваться</span></a></p>
+      </div>
+    </form>
+  </div>
+
+</div>
+<script>
+  if(document.querySelector(".div-error p").innerHTML==""){
+    document.querySelector(".div-error").style.display="none"
+  }
+  else{
+    setTimeout(()=>{document.querySelector(".div-error").style.display="none"}, 3000)
+  }
+</script>
+</body>
+</html>

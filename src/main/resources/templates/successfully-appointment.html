@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о записи</title>
+    <link rel="stylesheet" href="/css/new-info-appointment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+    <div class="white-block">
+        <div class="container-img" >
+            <div class="img">
+                <img th:src="${successfully==1}?'/img/V.png':'/img/minus.png'">
+            </div>
+        </div>
+        <div class="text-thank">
+            <p th:text="${successfully==1}?'Вы успешно записались!':'Удалось записаться, но не на всё:('"> </p>
+        </div>
+        <div class="info">
+            <p class="text" >Место: <span th:text="${place}">6</span></p>
+            <p class="text">Временные промежутки: <span th:text="${time}">19 фев 19:00, 19 фев 20:00, 19 фев 13:00</span></p>
+            <p class="text">Адрес: <span><a href="https://yandex.ru/maps/157/minsk/house/Zk4YcwJjSUMDQFtpfXR4dHprYA==/?ll=27.552777%2C53.895596&amp;z=17.45">
+                    г. Минск, ул. Карла Маркса 6 (вход под надписью femood)
+                </a></span></p>
+
+
+        </div>
+        <div class="ps">
+            <p class="text">
+                Сохраните информацию о записи! Если хотите отменить запись, то <a href="/#contacts">свяжитесь с нами</a>.
+            </p>
+        </div>
+        <div class="button">
+            <form method="get" action="/">
+                <button>На главную</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>
